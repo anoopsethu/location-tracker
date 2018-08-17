@@ -2,8 +2,8 @@
 <html>
 <head>
 	<title>Rescue Kerala | Track your location</title>
-	  <meta name="author" content="Kerala Designers Collaborative">
-  <meta name=viewport content="width=device-width, initial-scale=1">
+	<meta name="author" content="Kerala Designers Collaborative">
+  	<meta name=viewport content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="css/normalize.css">
 	<link rel="stylesheet" type="text/css" href="css/grid.css">
 	<link rel="stylesheet" type="text/css" href="css/styles.css">
@@ -18,29 +18,39 @@
 			</div>
 		</div>
 		<div class="row">
-			<div class="col-md-12" style="text-align: center;">
-				<div>
-					<button onclick="getCurrentLocation()" class="btn">Find current location</button>	
-					<button class="btn" onclick="showMap()">Mark location on Map</button>
+			<div class="col-md-8 col-md-offset-2" style="text-align: center;">
+				<div class="row">
+					<div class="col-md-5">
+						<button onclick="getCurrentLocation()" class="btn">Get current location</button>					
+					</div>
+					<div class="col-md-2">
+						<p class="separator">Or</p>
+					</div>
+					<div class="col-md-5">
+						<button class="btn" onclick="showMap()">Find location on Map</button>
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="row hide" id="url-bar">
-			<div class="col-md-8 col-md-offset-2">
+			<div class="col-md-8 col-md-offset-2 center">
 				<div class="location-display-div">
 					<span id="location-display-div"></span>
-					<a class="location-display-div-btn" id="location-display-div-btn" onclick="copyToClipboard()">Copy</a>
 				</div>
+				<a class="location-display-div-btn hide" id="location-display-div-btn" onclick="copyToClipboard()">Copy to Clipboard</a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-12">
-				<div id="map" class="map hide">
+				<div class="map-container hide" id="map-container">
+					<div id="map" class="map"></div>
+					<input type="text" class="pac-input" id="pac-input" name="" placeholder="Search for places...">
+				</div>
 			</div>
 		</div>
 	</div>
 
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpVOl5e_7hAY6d8bATOwRRO_YKwZ5YwGg&callback=initMap"
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpVOl5e_7hAY6d8bATOwRRO_YKwZ5YwGg&callback=initMap&libraries=places"
     async defer></script>
 	<script type="text/javascript">
 		function getCurrentLocation() {
@@ -52,7 +62,8 @@
 				  console.log(location.coords.longitude);
 				  console.log(location.coords.accuracy);
 				  console.log("https://www.google.com/maps?q=" + location.coords.latitude + "," + location.coords.longitude);
-				  document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + location.coords.latitude + "," + location.coords.longitude;
+				  document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + location.coords.latitude.toFixed(3) + "," + location.coords.longitude.toFixed(3);
+				  document.getElementById("location-display-div-btn").classList.remove("hide");
 				});
 			} else {
 			  
@@ -74,14 +85,57 @@ function initMap() {
 		  title: 'Location Marker'
 		});
 
+		var searchBox = new google.maps.places.SearchBox(document.getElementById('pac-input'));
+		   map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('pac-input'));
+		   google.maps.event.addListener(searchBox, 'places_changed', function() {
+		     searchBox.set('map', null);
+
+
+		     var places = searchBox.getPlaces();
+
+		     var bounds = new google.maps.LatLngBounds();
+		     var i, place;
+		     for (i = 0; place = places[i]; i++) {
+		       (function(place) {
+		         marker = new google.maps.Marker({
+				  draggable: true,
+		           position: place.geometry.location
+		         });
+		         marker.bindTo('map', searchBox, 'map');
+		         google.maps.event.addListener(marker, 'map_changed', function() {
+		           if (!this.getMap()) {
+		             this.unbindAll();
+		           }
+		         });
+
+		         document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + place.geometry.location.lat().toFixed(3) + "," + place.geometry.location.lng().toFixed(3);
+				 document.getElementById("location-display-div-btn").classList.remove("hide");
+
+
+		         bounds.extend(place.geometry.location);
+
+		         google.maps.event.addListener(marker, 'dragend', function(evt){
+				    document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + evt.latLng.lat().toFixed(3) + "," + evt.latLng.lng().toFixed(3);
+				  	document.getElementById("location-display-div-btn").classList.remove("hide");
+				});
+
+
+		       }(place));
+
+		     }
+		     map.fitBounds(bounds);
+		     searchBox.set('map', map);
+		     map.setZoom(Math.min(map.getZoom(),12));
+
+		   });
+
 		google.maps.event.addListener(marker, 'dragend', function(evt){
 
-    document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + evt.latLng.lat().toFixed(3) + "," + evt.latLng.lng().toFixed(3);
-});
+		    document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + evt.latLng.lat().toFixed(3) + "," + evt.latLng.lng().toFixed(3);
+				  document.getElementById("location-display-div-btn").classList.remove("hide");
 
-google.maps.event.addListener(marker, 'dragstart', function(evt){
-    document.getElementById('location-display-div').innerHTML = "Drop the marker to get the location";
-});
+		});
+
 
 
 
@@ -108,13 +162,17 @@ google.maps.event.addListener(marker, 'dragstart', function(evt){
 		    } finally {
 		      document.body.removeChild(textarea);
 		      document.getElementById("location-display-div-btn").innerHTML = "Copied!";
+		      setTimeout(()=>{
+		      	document.getElementById("location-display-div-btn").innerHTML = "Copy to Clipboard";
+		      }, 3000);
 		    }
 		  }
 		}
 
 		function showMap(){
 			showURLBar();
-			document.getElementById("map").classList.remove("hide");
+			document.getElementById("map-container").classList.remove("hide");
+			document.getElementById('location-display-div').innerHTML = "Move and drop the marker to a position to get the geo coordinate link";
 		}
 
 		function showURLBar(){

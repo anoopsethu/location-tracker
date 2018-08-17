@@ -5,7 +5,7 @@ body{
 }
 .btn{
 	background: #405cfe;
-	margin: 0px 10px;
+	margin: 10px;
 	border-radius: 1000px;
 	border: none;
 	font-weight: bold;
@@ -17,39 +17,82 @@ body{
 .container{
 	padding: 50px 0px;
 }
+.map-container{
+	margin: 20px 0px 50px 0px;
+}
+.pac-input{
+
+      top: 10px !important;
+    padding: 12px !important;
+    border-radius: 3px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.15);
+    border: 1px solid #ccc;
+    font-size: 1.5em;
+    outline: none;
+    color: #333;
+    width: 350px !important;
+}
 .map{
 	height: 500px;
 	width: 1000px;
 	margin: 0 auto;
 }
-.hide{
-	display: none;
-}
 .location-display-div{
 	padding: 25px;
 	border-radius: 4px;
-	background: #fff;
-	text-align: left;
-	font-size: 1.2em;
+	text-align: center;
+	font-size: 1.4em;
 	color: #444;
-	border: 1px solid #ccc;
-	margin: 40px 0px;
+	margin: 40px 0px 20px 0px;
 	position: relative;
 	height: 74px;
+	line-height: 1.4;
 }
 .location-display-div-btn{
-    position: absolute;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-    width: 100px;
     background: #fff;
-    color: #00c084;
+    color: #405cfe;
     cursor: pointer;
-    font-size: 1.1em;
+    font-size: 1.0em;
     display: inline-block;
     text-align: center;
-    border-left: 1px solid #ccc;
+    /* border-left: 1px solid #ccc; */
     border-radius: 0px 4px 4px 0px;
-    padding-top: 20px;
+    /* padding-top: 20px; */
+    padding: 15px 20px;
+    border-radius: 1000px;
+    display: block;
+    border: 1px solid #405cfe;
+    width: 170px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.hide{
+	display: none;
+}
+.center{
+	text-align: center;
+}
+.separator{
+	font-size: 1.2em;
+	margin: 25px;
+}
+
+@media(max-width: 800px){
+	.map{
+		    width: calc(100vw + 15px);
+		height: 100vh;
+	}
+	.pac-input{
+		    top: 65px !important;
+    padding: 12px !important;
+    border-radius: 3px;
+    box-shadow: 0px 1px 5px rgba(0,0,0,0.15);
+    border: 1px solid #ccc;
+    font-size: 1.5em;
+    outline: none;
+    color: #333;
+    width: 94% !important;
+    left: 10px !important;
+    right: 10px !important;
+	}
 }
