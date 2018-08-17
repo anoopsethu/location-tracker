@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Rescue Kerala | Track your location</title>
+	  <meta name="author" content="Kerala Designers Collaborative">
+  <meta name=viewport content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="normalize.css">
+	<link rel="stylesheet" type="text/css" href="grid.css">
+	<link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+				<div id="current">
+					
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="text-align: center;">
+				<div>
+					<button onclick="getCurrentLocation()" class="btn">Find current location</button>	
+					<button class="btn" onclick="showMap()">Mark location on Map</button>
+				</div>
+			</div>
+		</div>
+		<div class="row hide" id="url-bar">
+			<div class="col-md-8 col-md-offset-2">
+				<div class="location-display-div">
+					<span id="location-display-div"></span>
+					<a class="location-display-div-btn" id="location-display-div-btn" onclick="copyToClipboard()">Copy</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-12">
+				<div id="map" class="map hide">
+			</div>
+		</div>
+	</div>
+
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDpVOl5e_7hAY6d8bATOwRRO_YKwZ5YwGg&callback=initMap"
+    async defer></script>
+	<script type="text/javascript">
+		function getCurrentLocation() {
+			showURLBar();
+			if ("geolocation" in navigator) {
+				document.getElementById('location-display-div').innerHTML = "Fetching location, please wait...";
+				navigator.geolocation.getCurrentPosition(function(location) {
+				  console.log(location.coords.latitude);
+				  console.log(location.coords.longitude);
+				  console.log(location.coords.accuracy);
+				  console.log("https://www.google.com/maps?q=" + location.coords.latitude + "," + location.coords.longitude);
+				  document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + location.coords.latitude + "," + location.coords.longitude;
+				});
+			} else {
+			  
+			}
+		}
+
+function initMap() {
+        var myLatLng = {lat: 10.8505, lng: 76.2711};
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 12,
+          center: myLatLng
+        });
+
+        var marker = new google.maps.Marker({
+		  position: myLatLng,
+		  map: map,
+		  draggable: true,
+		  title: 'Location Marker'
+		});
+
+		google.maps.event.addListener(marker, 'dragend', function(evt){
+
+    document.getElementById('location-display-div').innerHTML = "https://www.google.com/maps?q=" + evt.latLng.lat().toFixed(3) + "," + evt.latLng.lng().toFixed(3);
+});
+
+google.maps.event.addListener(marker, 'dragstart', function(evt){
+    document.getElementById('location-display-div').innerHTML = "Drop the marker to get the location";
+});
+
+
+
+		}
+
+
+		function copyToClipboard() {
+			var text = document.getElementById('location-display-div').innerHTML;
+		  if (window.clipboardData && window.clipboardData.setData) {
+		    // IE specific code path to prevent textarea being shown while dialog is visible.
+		    return window.clipboardData.setData('Text', text);
+
+		  } else if (document.queryCommandSupported && document.queryCommandSupported('copy')) {
+		    const textarea = document.createElement('textarea');
+		    textarea.textContent = text;
+		    textarea.style.position = 'fixed';  // Prevent scrolling to bottom of page in MS Edge.
+		    document.body.appendChild(textarea);
+		    textarea.select();
+		    try {
+		      return document.execCommand('copy');  // Security exception may be thrown by some browsers.
+		    } catch (ex) {
+		      console.warn('Copy to clipboard failed.', ex);
+		      return false;
+		    } finally {
+		      document.body.removeChild(textarea);
+		      document.getElementById("location-display-div-btn").innerHTML = "Copied!";
+		    }
+		  }
+		}
+
+		function showMap(){
+			showURLBar();
+			document.getElementById("map").classList.remove("hide");
+		}
+
+		function showURLBar(){
+			document.getElementById("url-bar").classList.remove("hide");
+		}
+
+	</script>
+</body>
+</html>

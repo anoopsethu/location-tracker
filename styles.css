@@ -1,0 +1,55 @@
+body{
+	background: #e3faf4;
+	font-family: -apple-system, ".SFNSText-Regular", "San Francisco", "Roboto", "Segoe UI", "Helvetica Neue", "Lucida Grande", sans-serif;
+
+}
+.btn{
+	background: #00c084;
+	margin: 0px 10px;
+	border-radius: 1000px;
+	border: none;
+	font-weight: bold;
+	padding: 15px 30px;
+	color: #fff;
+	font-size: 1.2em;
+	outline: none;
+}
+.container{
+	padding: 50px 0px;
+}
+.map{
+	height: 500px;
+	width: 1000px;
+	margin: 0 auto;
+}
+.hide{
+	display: none;
+}
+.location-display-div{
+	padding: 25px;
+	border-radius: 4px;
+	background: #fff;
+	text-align: left;
+	font-size: 1.2em;
+	color: #444;
+	border: 1px solid #ccc;
+	margin: 40px 0px;
+	position: relative;
+	height: 74px;
+}
+.location-display-div-btn{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    bottom: 0px;
+    width: 100px;
+    background: #fff;
+    color: #00c084;
+    cursor: pointer;
+    font-size: 1.1em;
+    display: inline-block;
+    text-align: center;
+    border-left: 1px solid #ccc;
+    border-radius: 0px 4px 4px 0px;
+    padding-top: 20px;
+}
