@@ -33,7 +33,7 @@
 			</div>
 		</div>
 		<div class="row hide" id="url-bar">
-			<div class="col-md-8 col-md-offset-2 center">
+			<div class="col-md-12 center">
 				<div class="location-display-div">
 					<span id="location-display-div"></span>
 				</div>
@@ -119,6 +119,10 @@ function initMap() {
 				  	document.getElementById("location-display-div-btn").classList.remove("hide");
 				});
 
+		         google.maps.event.addListener(marker, 'dragstart', function(evt){
+				    document.getElementById('location-display-div').innerHTML = "Move and drop the marker to a position and see its sharable location link here.";
+				});
+
 
 		       }(place));
 
@@ -135,6 +139,11 @@ function initMap() {
 				  document.getElementById("location-display-div-btn").classList.remove("hide");
 
 		});
+
+
+		google.maps.event.addListener(marker, 'dragstart', function(evt){
+				    document.getElementById('location-display-div').innerHTML = "Move and drop the marker to a position and see its sharable location link here.";
+				});
 
 
 
@@ -172,7 +181,7 @@ function initMap() {
 		function showMap(){
 			showURLBar();
 			document.getElementById("map-container").classList.remove("hide");
-			document.getElementById('location-display-div').innerHTML = "Move and drop the marker to a position to get the geo coordinate link";
+			document.getElementById('location-display-div').innerHTML = "Move and drop the marker to a position and see its sharable location link here.";
 		}
 
 		function showURLBar(){
